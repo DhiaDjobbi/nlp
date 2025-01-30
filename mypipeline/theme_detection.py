@@ -15,9 +15,9 @@ THEME_KEYWORDS = {
     ],
     "Poor Customer Service": [
         "poor", "no response", "unhelpful", "rude", "bad", "terrible", "support", "ignored", 
-        "unresponsive", "frustrating", "lack", "disappointing", "no manager", 
+        "unresponsive", "frustrating", "lack", "disappointing", "no manager","won't respond"
         "manager never called", "follow up", "continuous problems", "zero contact",
-        "no customer service", "no customer support", "no customer care", "no customer help",
+        "no customer service", "no customer support", "no customer care", "no customer help","no help"
         "unhelpful response", "refuse to tell", "vague response", "poor service","useless","customer service is worse","no sign"
     ],
     "Unreliable Service": [
@@ -39,19 +39,19 @@ THEME_KEYWORDS = {
         "never shows", "no show driver", "did not show up", "failed pick up",
         "driver never arrived", "driver never showed", "driver never came", "driver never picked up",
         "swearing", "swore", "sworn", "swear", "cursing", "cursed", "curse", "cussing", "cussed",
-        "crash", "crashed", "crashing", "accident", "accidental", "accidentally", "collision","No one came"
+        "crash", "crashed", "crashing", "accident", "accidental", "accidentally", "collision","No one came","never attempted"
     ],
     "Parcel Handling Problems": [
-        "lost", "destroyed", "returned", "damaged", "missing", "broken", "opened", "stolen", 
+        "lost", "destroyed", "returned", "damaged", "missing", "broken", "opened", "stolen","right place"
         "misplaced", "mishandled", "crushed", "wet", "torn", "tampered", "ruined", "spoiled",
         "mangled", "smashed", "dented", "cracked", "scratched", "shattered", "crumpled", "soaked",
         "smash", "crush", "crumple", "soak", "soaked", "smashed", "crushed", "crumpled", "soaked",
-        "thrown", "throw", "toss", "tossed", "throwing", "tossing", "throw away", "toss away",
+        "thrown", "throw", "toss", "tossed", "throwing", "tossing", "throw away", "toss away","bent"
         "throwing away", "tossing away", "throw out", "toss out", "throwing out", "tossing out","curbside"
     ],
     "Cost and Value Concerns": [
         "affordable", "expensive", "overpriced", "costly", "pricey", "cheap", "unreasonable", 
-        "value", "fees", "hidden", "charges", "expensive", "money", "waste", "budget", "pricing",
+        "value", "fees", "hidden", "charges", "expensive", "money", "waste", "budget", "pricing","price was right"
         "reasonable", "inexpensive", "cost-effective", "cost-efficient", "cost-saving", "charge","half the price","Over priced"
     ],
     "Convenience and Ease": [
@@ -60,12 +60,12 @@ THEME_KEYWORDS = {
         "friendly interface"
     ],
     "Timeliness and Speed": [
-        "delayed", "late", "slow", "fast", "timely", "prompt", "speedy", "on time", 
-        "expedited", "rush", "quick", "efficient", "time-sensitive", "punctual", "swift",
+        "delayed", "late", "slow", "fast", "timely", "prompt", "speedy", "on time","promptly"
+        "expedited", "rush", "quick", "efficient", "time-sensitive", "punctual", "swift","days after delivery date"
         "timeframe", "time", "time-consuming", "time-wasting", "time-management", "time-saving",
-        "time-efficient", "time-critical", "time-sensitive", "time-consuming", "time-wasting",
+        "time-efficient", "time-critical", "time-sensitive", "time-consuming", "time-wasting","early"
         "wait", "waiting", "waiting time", "waiting period", "waiting list", "waiting room","early","fastest"
-        "waiting area", "waiting line", "waiting game", "waiting period", "waiting time","after","takes days","days","how quickly"
+        "waiting area", "waiting line", "waiting game", "waiting period", "waiting time","after","takes days","days","how quickly","earlier","fastest"
     ],
     "Service Variability": [
         "varies", "inconsistent", "unpredictable", "spotty", "mixed", "hit", "miss", 
@@ -94,14 +94,14 @@ THEME_KEYWORDS = {
         "worked hard", "help resolve issues", "is helpful", "helpful staff", "helpful team","Good","wont use any other","fair price","sweet","perfect","Easier to use","was then able"
     ],
     "Positive Feedback": [
-        "amazing", "great", "fantastic", "wonderful", "satisfying", "pleased", "impressive", 
+        "amazing", "great", "fantastic", "wonderful", "satisfying", "pleased", "impressive","perfect condition","thank you","BRAVO","perfect"
         "awesome", "top-notch", "outstanding", "happy", "worth", "excellent", "is good", "best", "love","incredible","Reliable","friendly ","well","Darling","Accurate","important"
         "helpful","Accurate","HAPPIER","perfectly","better","amazed","beautiful","safely","rock","quite well","super","Perfect","preferred"
     ],
     "Negative Experiences": [
         "frustrating", "infuriating", "upsetting", "terrible", "awful", "horrible", "worst", "dislike", 
         "hate", "displeased", "unhappy", "disappointment", "stress", "maddening", "irritating", 
-        "annoying", "exasperating","scam","not recommended"
+        "annoying", "exasperating","scam","not recommended","AVOID","upset","lying"
     ]
 }
 
