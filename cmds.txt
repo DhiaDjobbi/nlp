@@ -1,3 +1,5 @@
 pip install -r requirements.txt
 
+streamlit run app.py
+
 rm sendle_com_processed_with_sentiment_with_static_themes.csv
