@@ -126,6 +126,10 @@ def detect_themes(input_csv):
         detected_themes.append(theme)
     
     df["theme"] = detected_themes
+    
+    # Remove rows with "No Theme Detected"
+    df = df[df["theme"] != "No Theme Detected"]
+    
     df.to_csv(output_csv, index=False)
     print(f"Theme detection saved to {output_csv}")
     return output_csv

@@ -1,10 +1,14 @@
 import streamlit as st
 import sys
+import os
 import time
 import datetime
 from io import StringIO
 import contextlib
 from mypipeline import run_full_pipeline  # Import your pipeline function
+
+import pandas as pd
+import plotly.express as px
 
 # Function to capture logs in real-time
 class RealTimeLogger(StringIO):
@@ -37,18 +41,62 @@ st.title("NLP Pipeline with Streamlit")
 site_to_scrap = st.text_input("Enter the site to review (e.g., sendle.com):")
 
 # Button to trigger the pipeline
-if st.button("Run Pipeline2"):
+if st.button("Run Pipeline"):
     if site_to_scrap:
-        st.write(f"Running pipeline for site: {site_to_scrap}")
-        st.subheader("Pipeline Logs")
-        logs_placeholder = st.empty()  # Placeholder for logs
+        # Display the "Running pipeline" message with a spinner
+        with st.spinner(f"Running pipeline for site: {site_to_scrap}..."):
+            st.subheader("Pipeline Logs")
+            logs_placeholder = st.empty()  # Placeholder for logs
 
-        logs = []  # Store logs
+            logs = []  # Store logs
 
-        def update_logs(new_log):
-            logs.append(new_log)
-            logs_placeholder.text_area("Logs", "\n".join(logs), height=300)
+            def update_logs(new_log):
+                logs.append(new_log)
+                logs_placeholder.text_area("Logs", "\n".join(logs), height=300)
 
-        run_pipeline(site_to_scrap, update_logs)
+            # Run the pipeline
+            run_pipeline(site_to_scrap, update_logs)
+
+            # Wait for the pipeline to finish and check for the pie chart data file
+            pie_chart_data_path = "streamlit_folder/pie_chart_data.csv"
+            st.write("Waiting for pipeline to finish...")
+            while not os.path.exists(pie_chart_data_path):
+                time.sleep(1)  # Wait for 1 second before checking again
+
+            # Once the file exists, load and display the pie chart
+            st.write("Pipeline finished. Loading pie chart...")
+            pie_chart_data = pd.read_csv(pie_chart_data_path)
+
+            # Define custom colors for the pie chart
+            color_map = {
+                "NEGATIVE": "#FF6B6B",  # Soft red
+                "NEUTRAL": "#FFD166",   # Soft yellow/orange
+                "POSITIVE": "#4CAF50"   # Soft green
+            }
+
+            # Create a pie chart using Plotly with custom colors
+            fig = px.pie(
+                pie_chart_data, 
+                values="Percentage", 
+                names="Sentiment", 
+                title="Sentiment Distribution",
+                color="Sentiment",  # Use the 'Sentiment' column for coloring
+                color_discrete_map=color_map  # Apply the custom color map
+            )
+
+            # Update layout for a cleaner look
+            fig.update_traces(
+                textposition="inside", 
+                textinfo="percent+label",  # Show percentage and label inside slices
+                hole=0.3  # Add a hole in the middle for a donut chart effect
+            )
+            fig.update_layout(
+                showlegend=True,  # Show legend
+                legend_title_text="Sentiment",  # Legend title
+                font=dict(size=14)  # Increase font size for better readability
+            )
+
+            # Display the pie chart in Streamlit
+            st.plotly_chart(fig)
     else:
         st.warning("Please enter a site to review.")

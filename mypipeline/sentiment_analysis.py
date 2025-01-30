@@ -4,6 +4,10 @@ from transformers import pipeline
 
 def analyze_sentiment(input_csv):
     output_csv = input_csv.replace(".csv", "_with_sentiment.csv")
+    pie_chart_data_path = os.path.join("streamlit_folder", "pie_chart_data.csv")
+    
+    # Create the streamlit_folder if it doesn't exist
+    os.makedirs("streamlit_folder", exist_ok=True)
     
     if os.path.exists(output_csv):
         print(f"{output_csv} already exists. Skipping sentiment analysis.")
@@ -14,11 +18,13 @@ def analyze_sentiment(input_csv):
     # Drop rows where 'processed_text' is NaN
     df = df.dropna(subset=["processed_text"])
     
+    # Initialize the sentiment analyzer
     sentiment_analyzer = pipeline(
         "sentiment-analysis", 
         model="cardiffnlp/twitter-roberta-base-sentiment"
     )
     
+    # Map model labels to human-readable labels
     label_map = {"LABEL_0": "NEGATIVE", "LABEL_1": "NEUTRAL", "LABEL_2": "POSITIVE"}
     
     def get_sentiment(text):
@@ -35,6 +41,17 @@ def analyze_sentiment(input_csv):
     # Drop rows where sentiment analysis failed (None values)
     df = df.dropna(subset=["sentiment"])
     
+    # Save the sentiment analysis results
     df.to_csv(output_csv, index=False)
     print(f"Sentiment analysis saved to {output_csv}")
+    
+    # Prepare data for the pie chart
+    sentiment_counts = df["sentiment"].value_counts(normalize=True) * 100  # Get percentages
+    pie_chart_data = sentiment_counts.reset_index()
+    pie_chart_data.columns = ["Sentiment", "Percentage"]
+    
+    # Save the pie chart data to a CSV file
+    pie_chart_data.to_csv(pie_chart_data_path, index=False)
+    print(f"Pie chart data saved to {pie_chart_data_path}")
+    
     return output_csv
