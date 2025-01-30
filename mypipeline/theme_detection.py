@@ -31,7 +31,7 @@ THEME_KEYWORDS = {
         "no follow", "no status", "no clarity", "no notification", "no confirmation", "no tracking",
         "no communication", "no contact", "no call", "no email", "no message", "no text", "no reply",
         "unresponsive", "ignored", "unhelpful", "unreliable", "unprofessional", "untrustworthy",
-        "poor communication", "poor response", "poor feedback", "poor follow", "poor status"
+        "poor communication", "poor response", "poor feedback", "poor follow", "poor status","no indication"
     ],
     "Driver Problems": [
         "driver", "rude", "late", "no show", "unprofessional", "lost", "careless", "aggressive", 
@@ -52,18 +52,19 @@ THEME_KEYWORDS = {
     "Cost and Value Concerns": [
         "affordable", "expensive", "overpriced", "costly", "pricey", "cheap", "unreasonable", 
         "value", "fees", "hidden", "charges", "expensive", "money", "waste", "budget", "pricing",
-        "reasonable", "inexpensive", "cost-effective", "cost-efficient", "cost-saving", "charge"
+        "reasonable", "inexpensive", "cost-effective", "cost-efficient", "cost-saving", "charge","half the price","Over priced"
     ],
     "Convenience and Ease": [
         "easy", "convenient", "simple", "smooth", "quick", "efficient", "accessible", 
         "flexible", "intuitive", "hassle", "user-friendly", "straightforward", "seamless","Ease"
+        "friendly interface"
     ],
     "Timeliness and Speed": [
         "delayed", "late", "slow", "fast", "timely", "prompt", "speedy", "on time", 
         "expedited", "rush", "quick", "efficient", "time-sensitive", "punctual", "swift",
         "timeframe", "time", "time-consuming", "time-wasting", "time-management", "time-saving",
         "time-efficient", "time-critical", "time-sensitive", "time-consuming", "time-wasting",
-        "wait", "waiting", "waiting time", "waiting period", "waiting list", "waiting room",
+        "wait", "waiting", "waiting time", "waiting period", "waiting list", "waiting room","early","fastest"
         "waiting area", "waiting line", "waiting game", "waiting period", "waiting time","after","takes days","days","how quickly"
     ],
     "Service Variability": [
@@ -84,22 +85,23 @@ THEME_KEYWORDS = {
         "high volume", "pick-up delay", "never picked up","outsourced my packages","haven't received","delivered never","never got scanned"
     ],
     "Positive Experiences": [
-        "amazing", "great", "fantastic", "wonderful", "satisfying", "pleasant", 
-        "impressive", "awesome", "top-notch", "smooth", "outstanding", "worth", "happy", "pleased",
-        "excellent", "love", "recommend", "recommendation", "recommendable",
-        "joy", "joyful", "satisfied", "satisfaction", "happy", "happiness", "pleased", "pleasure",
-        "impressed", "impressive", "awesome", "awesomeness", "top-notch", "outstanding", "worth","that's all I need",
+        "amazing", "great", "fantastic", "wonderful", "satisfying", "pleasant","pleasantly surprised","came in"
+        "impressive", "awesome", "top-notch", "smooth", "outstanding", "worth", "happy", "pleased","Fasting"
+        "excellent", "love", "recommend", "recommendation", "recommendable","quickly","up to date"
+        "joy", "joyful", "satisfied", "satisfaction", "happy", "happiness", "pleased", "pleasure","very comfortable"
+        "impressed", "impressive", "awesome", "awesomeness", "top-notch", "outstanding", "worth","that's all I need","Nice job"
         "excellent", "is good", "love", "recommend", "recommendation", "recommendable","quickly","helped","perfect","as ordered","Thank you","good price"
         "worked hard", "help resolve issues", "is helpful", "helpful staff", "helpful team","Good","wont use any other","fair price","sweet","perfect","Easier to use","was then able"
     ],
     "Positive Feedback": [
         "amazing", "great", "fantastic", "wonderful", "satisfying", "pleased", "impressive", 
-        "awesome", "top-notch", "outstanding", "happy", "worth", "excellent", "is good", "best", "love","incredible","Reliable","friendly ","well","Darling","Accurate"
+        "awesome", "top-notch", "outstanding", "happy", "worth", "excellent", "is good", "best", "love","incredible","Reliable","friendly ","well","Darling","Accurate","important"
+        "helpful","Accurate","HAPPIER","perfectly","better","amazed","beautiful","safely","rock","quite well","super","Perfect","preferred"
     ],
     "Negative Experiences": [
         "frustrating", "infuriating", "upsetting", "terrible", "awful", "horrible", "worst", "dislike", 
         "hate", "displeased", "unhappy", "disappointment", "stress", "maddening", "irritating", 
-        "annoying", "exasperating","scam"
+        "annoying", "exasperating","scam","not recommended"
     ]
 }
 
