@@ -1,4 +1,8 @@
 import streamlit as st
+
+# Set the page layout to wide
+st.set_page_config(layout="wide")
+
 import sys
 import os
 import time
@@ -13,6 +17,28 @@ import pycountry
 
 from dashboard.pie_chart import render_pie_chart
 from dashboard.bar_chart import render_bar_chart
+
+# Apply custom CSS styling globally
+st.markdown(
+    """
+    <style>
+    .stTextArea textarea {
+        background-color: black !important;
+        color: white !important;
+    }
+    .stTextArea textarea::-webkit-scrollbar {
+        width: 16px;  /* Increase the width of the scrollbar */
+    }
+    .stTextArea textarea::-webkit-scrollbar-thumb {
+        background: #888;  /* Color of the scrollbar thumb */
+    }
+    .stTextArea textarea::-webkit-scrollbar-thumb:hover {
+        background: #555;  /* Color of the scrollbar thumb on hover */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Function to capture logs in real-time
 class RealTimeLogger(StringIO):
@@ -35,6 +61,7 @@ def run_pipeline(site_to_scrap, log_callback):
     try:
         result_file = run_full_pipeline(site_to_scrap)
         print(f"Final results saved to: {result_file}")
+        return result_file
     finally:
         sys.stdout = old_stdout
 
@@ -86,7 +113,7 @@ def render_reviews_heatmap(df):
     return fig_map
 
 # Streamlit UI
-st.set_page_config(layout="wide")  # Set the page layout to wide
+# st.set_page_config(layout="wide")  # Set the page layout to wide
 
 st.title("NLP Pipeline with Streamlit")
 
@@ -105,44 +132,12 @@ if st.button("Run Pipeline"):
 
             def update_logs(new_log):
                 logs.append(new_log)
-                st.markdown(
-                    """
-                    <style>
-                    .stTextArea textarea {
-                        background-color: black !important;
-                        color: white !important;
-                    }
-                    .stTextArea textarea::-webkit-scrollbar {
-                        width: 16px;  /* Increase the width of the scrollbar */
-                    }
-                    .stTextArea textarea::-webkit-scrollbar-thumb {
-                        background: #888;  /* Color of the scrollbar thumb */
-                    }
-                    .stTextArea textarea::-webkit-scrollbar-thumb:hover {
-                        background: #555;  /* Color of the scrollbar thumb on hover */
-                    }
-                    </style>
-                    """,
-                    unsafe_allow_html=True,
-                )
                 logs_placeholder.text_area("Logs", "\n".join(logs), height=300)
 
             # Run the pipeline
-            run_pipeline(site_to_scrap, update_logs)
-
-            # Wait for the pipeline to finish and get the result DataFrame
-            waiting_message = st.empty()
-            waiting_message.write("Waiting for pipeline to finish...")
-            result_file = None
-            while result_file is None:
-                time.sleep(1)  # Wait for 1 second before checking again
-                try:
-                    result_file = run_full_pipeline(site_to_scrap)  # Replace with your actual pipeline output
-                except Exception as e:
-                    st.warning(f"Pipeline not finished yet: {e}")
+            result_file = run_pipeline(site_to_scrap, update_logs)
 
             # Once the pipeline finishes, load the result DataFrame
-            waiting_message.empty()
             st.write("Pipeline finished. Loading results...")
             df = pd.read_csv(result_file)  # Assuming the pipeline saves results to a CSV file
 
@@ -166,3 +161,5 @@ if st.button("Run Pipeline"):
 
 # monthes with lowest reviews
 # monsthes with highest review
+
+
