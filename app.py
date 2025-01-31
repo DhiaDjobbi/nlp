@@ -41,6 +41,12 @@ st.markdown(
         padding: 10px !important;
         border-radius: 10px !important;
     }
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -136,7 +142,9 @@ def get_country_flag_url(country_code):
 # Streamlit UI
 # st.set_page_config(layout="wide")  # Set the page layout to wide
 
-st.title("NLP Pipeline with Streamlit")
+st.markdown('<div class="center"><img src="https://i.imgur.com/eW1zzCH.png" width="200"/></div>', unsafe_allow_html=True)
+
+st.title("DeliverMind: NLP Review Analysis Dashboard")
 
 # Input field for the site to review
 site_to_scrap = st.text_input("Enter the site to review (e.g., sendle.com):")
@@ -194,5 +202,6 @@ if st.button("Run Pipeline"):
             st.plotly_chart(fig_map, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
+
 
 
