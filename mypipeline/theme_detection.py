@@ -138,12 +138,4 @@ def detect_themes(input_csv):
     df.to_csv(output_csv, index=False)
     print(f"Theme detection saved to {output_csv}")
     
-    # Prepare data for the bar chart
-    theme_counts = df["theme"].value_counts().reset_index()
-    theme_counts.columns = ["Theme", "Count"]
-    
-    # Save the bar chart data to a CSV file
-    theme_counts.to_csv(bar_chart_data_path, index=False)
-    print(f"Bar chart data saved to {bar_chart_data_path}")
-    
     return output_csv

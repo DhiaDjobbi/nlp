@@ -45,13 +45,4 @@ def analyze_sentiment(input_csv):
     df.to_csv(output_csv, index=False)
     print(f"Sentiment analysis saved to {output_csv}")
     
-    # Prepare data for the pie chart
-    sentiment_counts = df["sentiment"].value_counts(normalize=True) * 100  # Get percentages
-    pie_chart_data = sentiment_counts.reset_index()
-    pie_chart_data.columns = ["Sentiment", "Percentage"]
-    
-    # Save the pie chart data to a CSV file
-    pie_chart_data.to_csv(pie_chart_data_path, index=False)
-    print(f"Pie chart data saved to {pie_chart_data_path}")
-    
     return output_csv
