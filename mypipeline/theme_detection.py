@@ -108,6 +108,10 @@ THEME_KEYWORDS = {
 
 def detect_themes(input_csv):
     output_csv = input_csv.replace(".csv", "_with_themes.csv")
+    bar_chart_data_path = os.path.join("streamlit_folder", "bar_chart_data.csv")
+    
+    # Create the streamlit_folder if it doesn't exist
+    os.makedirs("streamlit_folder", exist_ok=True)
     
     if os.path.exists(output_csv):
         print(f"{output_csv} already exists. Skipping theme detection.")
@@ -130,6 +134,16 @@ def detect_themes(input_csv):
     # Remove rows with "No Theme Detected"
     df = df[df["theme"] != "No Theme Detected"]
     
+    # Save the theme detection results
     df.to_csv(output_csv, index=False)
     print(f"Theme detection saved to {output_csv}")
+    
+    # Prepare data for the bar chart
+    theme_counts = df["theme"].value_counts().reset_index()
+    theme_counts.columns = ["Theme", "Count"]
+    
+    # Save the bar chart data to a CSV file
+    theme_counts.to_csv(bar_chart_data_path, index=False)
+    print(f"Bar chart data saved to {bar_chart_data_path}")
+    
     return output_csv

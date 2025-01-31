@@ -32,12 +32,16 @@ def scrape_trustpilot_reviews(site_to_review):
                 date_tag = review.find("time")
                 date = date_tag.text.strip() if date_tag else None
 
-                if rating and title and text and date:
+                country_tag = review.find_previous("div", class_="typography_body-m__k2UI7 typography_appearance-subtle__PYOVM styles_detailsIcon__ch_FY")
+                country = country_tag.find("span").text.strip() if country_tag else None
+
+                if rating and title and text and date and country:
                     reviews.append({
                         "rating": rating,
                         "title": title,
                         "text": text,
-                        "date": date
+                        "date": date,
+                        "country": country
                     })
             except Exception as e:
                 print(f"Error extracting review: {e}")
@@ -59,7 +63,7 @@ def scrape_trustpilot_reviews(site_to_review):
         all_reviews.extend(scrape_page(page))
 
     with open(csv_filename, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["rating", "title", "text", "date"])
+        writer = csv.DictWriter(f, fieldnames=["rating", "title", "text", "date", "country"])
         writer.writeheader()
         writer.writerows(all_reviews)
 

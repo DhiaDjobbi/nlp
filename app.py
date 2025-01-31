@@ -59,12 +59,15 @@ if st.button("Run Pipeline"):
 
             # Wait for the pipeline to finish and check for the pie chart data file
             pie_chart_data_path = "streamlit_folder/pie_chart_data.csv"
+            bar_chart_data_path = "streamlit_folder/bar_chart_data.csv"
             st.write("Waiting for pipeline to finish...")
-            while not os.path.exists(pie_chart_data_path):
+            while not (os.path.exists(pie_chart_data_path) and os.path.exists(bar_chart_data_path)):
                 time.sleep(1)  # Wait for 1 second before checking again
 
-            # Once the file exists, load and display the pie chart
-            st.write("Pipeline finished. Loading pie chart...")
+            # Once the files exist, load and display the pie chart
+            st.write("Pipeline finished. Loading charts...")
+            
+            # Load and display the pie chart
             pie_chart_data = pd.read_csv(pie_chart_data_path)
 
             # Define custom colors for the pie chart
@@ -75,7 +78,7 @@ if st.button("Run Pipeline"):
             }
 
             # Create a pie chart using Plotly with custom colors
-            fig = px.pie(
+            fig_pie = px.pie(
                 pie_chart_data, 
                 values="Percentage", 
                 names="Sentiment", 
@@ -85,18 +88,47 @@ if st.button("Run Pipeline"):
             )
 
             # Update layout for a cleaner look
-            fig.update_traces(
+            fig_pie.update_traces(
                 textposition="inside", 
                 textinfo="percent+label",  # Show percentage and label inside slices
                 hole=0.3  # Add a hole in the middle for a donut chart effect
             )
-            fig.update_layout(
+            fig_pie.update_layout(
                 showlegend=True,  # Show legend
                 legend_title_text="Sentiment",  # Legend title
                 font=dict(size=14)  # Increase font size for better readability
             )
 
             # Display the pie chart in Streamlit
-            st.plotly_chart(fig)
+            st.plotly_chart(fig_pie)
+
+            # Load and display the bar chart
+            bar_chart_data = pd.read_csv(bar_chart_data_path)
+
+            # Create a bar chart using Plotly
+            fig_bar = px.bar(
+                bar_chart_data, 
+                x="Theme", 
+                y="Count", 
+                title="Theme Distribution",
+                labels={"Count": "Number of Occurrences", "Theme": "Themes"},
+                color="Theme",  # Use the 'Theme' column for coloring
+                color_discrete_sequence=px.colors.qualitative.Pastel  # Use a professional color palette
+            )
+
+            # Update layout for a cleaner look
+            fig_bar.update_layout(
+                xaxis_title="Themes",
+                yaxis_title="Number of Occurrences",
+                showlegend=False,  # Hide legend for simplicity
+                font=dict(size=14)  # Increase font size for better readability
+            )
+
+            # Display the bar chart in Streamlit
+            st.plotly_chart(fig_bar)
     else:
         st.warning("Please enter a site to review.")
+
+
+# monthes with lowest reviews
+# monsthes with highest review
