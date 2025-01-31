@@ -7,3 +7,5 @@ torch
 scikit-learn
 matplotlib
 streamlit
+dateparser
+pycountry

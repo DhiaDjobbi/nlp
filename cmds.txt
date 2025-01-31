@@ -3,4 +3,4 @@ pip install -r requirements.txt
 streamlit run app.py
 python -m streamlit run app.py
 
-rm -rf data/*
+rm -rf data/sendle*

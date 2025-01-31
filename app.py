@@ -9,6 +9,7 @@ from mypipeline import run_full_pipeline
 
 import pandas as pd
 import plotly.express as px
+import pycountry
 
 from dashboard.pie_chart import render_pie_chart
 from dashboard.bar_chart import render_bar_chart
@@ -57,6 +58,32 @@ def render_rating_distribution_by_month(df):
     )
     fig_month.update_layout(xaxis_title='Month', yaxis_title='Number of Ratings')
     return fig_month
+
+def render_reviews_heatmap(df):
+    # Convert country codes to country names
+    df['country_name'] = df['country'].apply(lambda code: pycountry.countries.get(alpha_2=code).name if pycountry.countries.get(alpha_2=code) else code)
+    country_distribution = df['country_name'].value_counts().reset_index()
+    country_distribution.columns = ['Country', 'Review Count']
+
+    fig_map = px.choropleth(
+        country_distribution,
+        locations='Country',
+        locationmode='country names',
+        color='Review Count',
+        hover_name='Country',
+        color_continuous_scale=px.colors.sequential.Plasma,
+        title='Reviews Heatmap by Country'
+    )
+    fig_map.update_layout(
+        geo=dict(
+            showframe=False,
+            showcoastlines=False,
+            projection_type='equirectangular',
+            bgcolor='black'
+        ),
+        paper_bgcolor='#0e1117',  # Set the paper background color to match
+    )
+    return fig_map
 
 # Streamlit UI
 st.set_page_config(layout="wide")  # Set the page layout to wide
@@ -123,6 +150,7 @@ if st.button("Run Pipeline"):
             fig_pie = render_pie_chart(df)
             fig_bar = render_bar_chart(df)
             fig_month = render_rating_distribution_by_month(df)
+            fig_map = render_reviews_heatmap(df)
 
             if fig_pie and fig_bar:
                 col1, col2 = st.columns([0.6, 0.4])
@@ -132,9 +160,9 @@ if st.button("Run Pipeline"):
                     st.plotly_chart(fig_pie, use_container_width=True)
             
             st.plotly_chart(fig_month, use_container_width=True)
+            st.plotly_chart(fig_map, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
 
 # monthes with lowest reviews
 # monsthes with highest review
-
