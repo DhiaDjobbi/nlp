@@ -5,10 +5,13 @@ import time
 import datetime
 from io import StringIO
 import contextlib
-from mypipeline import run_full_pipeline  # Import your pipeline function
+from mypipeline import run_full_pipeline
 
 import pandas as pd
 import plotly.express as px
+
+from dashboard.pie_chart import render_pie_chart
+from dashboard.bar_chart import render_bar_chart
 
 # Function to capture logs in real-time
 class RealTimeLogger(StringIO):
@@ -35,6 +38,8 @@ def run_pipeline(site_to_scrap, log_callback):
         sys.stdout = old_stdout
 
 # Streamlit UI
+st.set_page_config(layout="wide")  # Set the page layout to wide
+
 st.title("NLP Pipeline with Streamlit")
 
 # Input field for the site to review
@@ -52,83 +57,50 @@ if st.button("Run Pipeline"):
 
             def update_logs(new_log):
                 logs.append(new_log)
+                st.markdown(
+                    """
+                    <style>
+                    .stTextArea textarea {
+                        background-color: black !important;
+                        color: white !important;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
                 logs_placeholder.text_area("Logs", "\n".join(logs), height=300)
 
             # Run the pipeline
             run_pipeline(site_to_scrap, update_logs)
 
-            # Wait for the pipeline to finish and check for the pie chart data file
-            pie_chart_data_path = "streamlit_folder/pie_chart_data.csv"
-            bar_chart_data_path = "streamlit_folder/bar_chart_data.csv"
-            st.write("Waiting for pipeline to finish...")
-            while not (os.path.exists(pie_chart_data_path) and os.path.exists(bar_chart_data_path)):
+            # Wait for the pipeline to finish and get the result DataFrame
+            waiting_message = st.empty()
+            waiting_message.write("Waiting for pipeline to finish...")
+            result_file = None
+            while result_file is None:
                 time.sleep(1)  # Wait for 1 second before checking again
+                try:
+                    result_file = run_full_pipeline(site_to_scrap)  # Replace with your actual pipeline output
+                except Exception as e:
+                    st.warning(f"Pipeline not finished yet: {e}")
 
-            # Once the files exist, load and display the pie chart
-            st.write("Pipeline finished. Loading charts...")
-            
-            # Load and display the pie chart
-            pie_chart_data = pd.read_csv(pie_chart_data_path)
+            # Once the pipeline finishes, load the result DataFrame
+            waiting_message.empty()
+            st.write("Pipeline finished. Loading results...")
+            df = pd.read_csv(result_file)  # Assuming the pipeline saves results to a CSV file
 
-            # Define custom colors for the pie chart
-            color_map = {
-                "NEGATIVE": "#FF6B6B",  # Soft red
-                "NEUTRAL": "#FFD166",   # Soft yellow/orange
-                "POSITIVE": "#4CAF50"   # Soft green
-            }
+            # Render the charts in real-time
+            fig_pie = render_pie_chart(df)
+            fig_bar = render_bar_chart(df)
 
-            # Create a pie chart using Plotly with custom colors
-            fig_pie = px.pie(
-                pie_chart_data, 
-                values="Percentage", 
-                names="Sentiment", 
-                title="Sentiment Distribution",
-                color="Sentiment",  # Use the 'Sentiment' column for coloring
-                color_discrete_map=color_map  # Apply the custom color map
-            )
-
-            # Update layout for a cleaner look
-            fig_pie.update_traces(
-                textposition="inside", 
-                textinfo="percent+label",  # Show percentage and label inside slices
-                hole=0.3  # Add a hole in the middle for a donut chart effect
-            )
-            fig_pie.update_layout(
-                showlegend=True,  # Show legend
-                legend_title_text="Sentiment",  # Legend title
-                font=dict(size=14)  # Increase font size for better readability
-            )
-
-            # Display the pie chart in Streamlit
-            st.plotly_chart(fig_pie)
-
-            # Load and display the bar chart
-            bar_chart_data = pd.read_csv(bar_chart_data_path)
-
-            # Create a bar chart using Plotly
-            fig_bar = px.bar(
-                bar_chart_data, 
-                x="Theme", 
-                y="Count", 
-                title="Theme Distribution",
-                labels={"Count": "Number of Occurrences", "Theme": "Themes"},
-                color="Theme",  # Use the 'Theme' column for coloring
-                color_discrete_sequence=px.colors.qualitative.Pastel  # Use a professional color palette
-            )
-
-            # Update layout for a cleaner look
-            fig_bar.update_layout(
-                xaxis_title="Themes",
-                yaxis_title="Number of Occurrences",
-                showlegend=False,  # Hide legend for simplicity
-                font=dict(size=14)  # Increase font size for better readability
-            )
-
-            # Display the bar chart in Streamlit
-            st.plotly_chart(fig_bar)
+            if fig_pie and fig_bar:
+                col1, col2 = st.columns([0.6, 0.4])
+                with col1:
+                    st.plotly_chart(fig_bar, use_container_width=True)
+                with col2:
+                    st.plotly_chart(fig_pie, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
-
 
 # monthes with lowest reviews
 # monsthes with highest review
