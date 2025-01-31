@@ -85,6 +85,15 @@ if st.button("Run Pipeline"):
                         background-color: black !important;
                         color: white !important;
                     }
+                    .stTextArea textarea::-webkit-scrollbar {
+                        width: 16px;  /* Increase the width of the scrollbar */
+                    }
+                    .stTextArea textarea::-webkit-scrollbar-thumb {
+                        background: #888;  /* Color of the scrollbar thumb */
+                    }
+                    .stTextArea textarea::-webkit-scrollbar-thumb:hover {
+                        background: #555;  /* Color of the scrollbar thumb on hover */
+                    }
                     </style>
                     """,
                     unsafe_allow_html=True,
