@@ -129,6 +129,12 @@ def calculate_metrics(df):
     
     most_positive_country = df[df['rating'] == df['rating'].max()]['country'].mode()[0]
     most_negative_country = df[df['rating'] == df['rating'].min()]['country'].mode()[0]
+    
+    # Ensure most positive and most negative countries are not the same
+    if most_positive_country == most_negative_country:
+        second_most_negative_country = df[df['rating'] == df['rating'].min()]['country'].value_counts().index[1]
+        most_negative_country = second_most_negative_country
+    
     df['hour'] = pd.to_datetime(df['date']).dt.hour
     peak_review_hours = df['hour'].mode()[0]
     peak_review_period = "AM" if peak_review_hours < 12 else "PM"
@@ -202,6 +208,3 @@ if st.button("Run Pipeline"):
             st.plotly_chart(fig_map, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
-
-
-

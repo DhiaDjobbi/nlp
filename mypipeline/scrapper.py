@@ -52,7 +52,8 @@ def scrape_trustpilot_reviews(site_to_review):
                         "country": country
                     })
             except Exception as e:
-                print(f"Error extracting review: {e}")
+                # print(f"Error extracting review: {e}")
+                pass
         return reviews
 
     if os.path.exists(csv_filename):
