@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 import os
+import dateparser
 
 def scrape_trustpilot_reviews(site_to_review):
     base_url = f"https://www.trustpilot.com/review/{site_to_review}?page="
@@ -36,6 +37,13 @@ def scrape_trustpilot_reviews(site_to_review):
                 country = country_tag.find("span").text.strip() if country_tag else None
 
                 if rating and title and text and date and country:
+                    # Remove "Updated " from the text and parse dates
+                    if "Updated " in date:
+                        date = date.replace("Updated ", "")
+                    parsed_date = dateparser.parse(date)
+                    if parsed_date:
+                        date = parsed_date.strftime("%b %d, %Y")
+                        
                     reviews.append({
                         "rating": rating,
                         "title": title,

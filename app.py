@@ -37,6 +37,27 @@ def run_pipeline(site_to_scrap, log_callback):
     finally:
         sys.stdout = old_stdout
 
+def render_rating_distribution_by_month(df):
+    df['date'] = pd.to_datetime(df['date'])
+    df['month'] = df['date'].dt.to_period('M').astype(str)
+    df['month'] = df['date'].dt.strftime('%B %Y')
+    monthly_distribution = df.groupby('month')['rating'].count().reset_index()
+    monthly_distribution.columns = ['Month', 'Rating Count']
+    monthly_distribution['Month'] = pd.to_datetime(monthly_distribution['Month'])
+    monthly_distribution = monthly_distribution.sort_values('Month')
+
+    fig_month = px.bar(
+        monthly_distribution,
+        x='Month',
+        y='Rating Count',
+        title='Rating Distribution by Month',
+        labels={'Month': 'Month', 'Rating Count': 'Number of Ratings'},
+        color='Rating Count',
+        color_continuous_scale=px.colors.sequential.Viridis
+    )
+    fig_month.update_layout(xaxis_title='Month', yaxis_title='Number of Ratings')
+    return fig_month
+
 # Streamlit UI
 st.set_page_config(layout="wide")  # Set the page layout to wide
 
@@ -92,6 +113,7 @@ if st.button("Run Pipeline"):
             # Render the charts in real-time
             fig_pie = render_pie_chart(df)
             fig_bar = render_bar_chart(df)
+            fig_month = render_rating_distribution_by_month(df)
 
             if fig_pie and fig_bar:
                 col1, col2 = st.columns([0.6, 0.4])
@@ -99,8 +121,11 @@ if st.button("Run Pipeline"):
                     st.plotly_chart(fig_bar, use_container_width=True)
                 with col2:
                     st.plotly_chart(fig_pie, use_container_width=True)
+            
+            st.plotly_chart(fig_month, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
 
 # monthes with lowest reviews
 # monsthes with highest review
+
