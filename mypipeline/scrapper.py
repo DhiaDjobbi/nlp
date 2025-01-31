@@ -31,7 +31,7 @@ def scrape_trustpilot_reviews(site_to_review):
                 text = text_tag.text.strip() if text_tag else None
 
                 date_tag = review.find("time")
-                date = date_tag.text.strip() if date_tag else None
+                date = date_tag.get("datetime") if date_tag else None
 
                 country_tag = review.find_previous("div", class_="typography_body-m__k2UI7 typography_appearance-subtle__PYOVM styles_detailsIcon__ch_FY")
                 country = country_tag.find("span").text.strip() if country_tag else None
@@ -42,7 +42,7 @@ def scrape_trustpilot_reviews(site_to_review):
                         date = date.replace("Updated ", "")
                     parsed_date = dateparser.parse(date)
                     if parsed_date:
-                        date = parsed_date.strftime("%b %d, %Y")
+                        date = parsed_date.strftime("%Y-%m-%d %H:%M:%S")
                         
                     reviews.append({
                         "rating": rating,
@@ -75,5 +75,5 @@ def scrape_trustpilot_reviews(site_to_review):
         writer.writeheader()
         writer.writerows(all_reviews)
 
-    print(f"Scraped {len(all_reviews)} reviews and saved to {csv_filename}")
+    print(f"Scraped reviews and saved to {csv_filename}")
     return csv_filename

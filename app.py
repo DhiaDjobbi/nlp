@@ -14,6 +14,7 @@ from mypipeline import run_full_pipeline
 import pandas as pd
 import plotly.express as px
 import pycountry
+import scipy.stats as stats
 
 from dashboard.pie_chart import render_pie_chart
 from dashboard.bar_chart import render_bar_chart
@@ -34,6 +35,11 @@ st.markdown(
     }
     .stTextArea textarea::-webkit-scrollbar-thumb:hover {
         background: #555;  /* Color of the scrollbar thumb on hover */
+    }
+    .stColumn {
+        border: 1px solid gray !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
     }
     </style>
     """,
@@ -112,6 +118,21 @@ def render_reviews_heatmap(df):
     )
     return fig_map
 
+def calculate_metrics(df):
+    total_reviews = len(df)
+    
+    most_positive_country = df[df['rating'] == df['rating'].max()]['country'].mode()[0]
+    most_negative_country = df[df['rating'] == df['rating'].min()]['country'].mode()[0]
+    df['hour'] = pd.to_datetime(df['date']).dt.hour
+    peak_review_hours = df['hour'].mode()[0]
+    peak_review_period = "AM" if peak_review_hours < 12 else "PM"
+    peak_review_hours = peak_review_hours % 12 if peak_review_hours > 12 else peak_review_hours
+    
+    return total_reviews, most_positive_country, most_negative_country, peak_review_hours, peak_review_period
+
+def get_country_flag_url(country_code):
+    return f"https://flagsapi.com/{country_code}/flat/64.png"
+
 # Streamlit UI
 # st.set_page_config(layout="wide")  # Set the page layout to wide
 
@@ -141,6 +162,21 @@ if st.button("Run Pipeline"):
             st.write("Pipeline finished. Loading results...")
             df = pd.read_csv(result_file)  # Assuming the pipeline saves results to a CSV file
 
+            # Calculate metrics
+            total_reviews, most_positive_country, most_negative_country, peak_review_hours, peak_review_period = calculate_metrics(df)
+
+            # Display metrics cards
+            st.subheader("Metrics")
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Total Reviews", total_reviews)
+            
+            positive_flag_url = get_country_flag_url(most_positive_country)
+            negative_flag_url = get_country_flag_url(most_negative_country)
+            
+            col2.markdown(f"Most Positive Country: {most_positive_country} ![flag]({positive_flag_url})")
+            col3.markdown(f"Most Negative Country: {most_negative_country} ![flag]({negative_flag_url})")
+            col4.metric("Peak Review Hours", f"{peak_review_hours}:00 - {peak_review_hours + 1}:00 {peak_review_period}")
+
             # Render the charts in real-time
             fig_pie = render_pie_chart(df)
             fig_bar = render_bar_chart(df)
@@ -158,8 +194,5 @@ if st.button("Run Pipeline"):
             st.plotly_chart(fig_map, use_container_width=True)
     else:
         st.warning("Please enter a site to review.")
-
-# monthes with lowest reviews
-# monsthes with highest review
 
 
