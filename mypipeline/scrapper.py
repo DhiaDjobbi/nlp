@@ -3,6 +3,10 @@ from bs4 import BeautifulSoup
 import csv
 import os
 import dateparser
+# from transformers import pipeline
+
+# # Initialize the summarization model
+# summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 def scrape_trustpilot_reviews(site_to_review):
     base_url = f"https://www.trustpilot.com/review/{site_to_review}?page="
@@ -71,7 +75,18 @@ def scrape_trustpilot_reviews(site_to_review):
         print(f"Scraping page {page}...")
         all_reviews.extend(scrape_page(page))
 
+    # # Summarize the reviews
+    # print("Summarizing reviews...")
+    # for review in all_reviews:
+    #     try:
+    #         summary = summarizer(review["text"], max_length=50, min_length=15, do_sample=False)
+    #         review["summarized_text"] = summary[0]['summary_text']
+    #     except Exception as e:
+    #         review["summarized_text"] = None
+    # print("Summarized all reviews.")
+
     with open(csv_filename, "w", newline='', encoding="utf-8") as f:
+        # writer = csv.DictWriter(f, fieldnames=["rating", "title", "text", "date", "country", "summarized_text"])
         writer = csv.DictWriter(f, fieldnames=["rating", "title", "text", "date", "country"])
         writer.writeheader()
         writer.writerows(all_reviews)
